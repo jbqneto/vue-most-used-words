@@ -4,7 +4,14 @@
 module.exports = rows => {
   return new Promise((resolve, reject) => {
     try {
-      const words = rows.filter(filterValidRow);
+      const words = rows
+        .filter(filterValidRow)
+        .map(removeSpecialChars)
+        .map(removeTags)
+        .reduce(mergeRows)
+        .split(' ')
+        .filter(word => (word.length > 2))
+        .map(word => word.toLowerCase());
 
       resolve(words);
     } catch (e) {
@@ -24,3 +31,14 @@ function filterValidRow(row) {
 
   return notNumber && notEmpty && notInterval;
 }
+
+/**
+ * 
+ * @param {String} row 
+ */
+function removeSpecialChars(row) {
+  return row.replace(/[,?!.-] /g, '').replace('"', '').replace("'", '');
+}
+
+const removeTags = row => row.replace(/(<[^>]+)>/ig, '').trim();
+const mergeRows = (concatText, row) => `${concatText} ${row}`;
