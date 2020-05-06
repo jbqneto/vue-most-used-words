@@ -1,6 +1,12 @@
 const { ipcMain } = require('electron');
 
-ipcMain.on('sendSubtitles', (event, args) => {
-  console.log(args);
-  event.reply('sendSubtitles', "pong");
+const pathsToRows = require('./pathToRows');
+
+ipcMain.on('process-subtitles', (event, paths) => {
+
+  const rows = pathsToRows(paths);
+
+  console.log(rows);
+
+  event.reply('process-subtitles', "pong");
 });

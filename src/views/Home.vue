@@ -45,8 +45,10 @@ export default {
   methods: {
     processSubtitles() {
       console.log(this.files);
-      ipcRenderer.send("sendSubtitles", "ping");
-      ipcRenderer.on("sendSubtitles", (event, resp) => {
+      const paths = this.files.map(file => file.path);
+      console.log(paths);
+      ipcRenderer.send("process-subtitles", paths);
+      ipcRenderer.on("process-subtitles", (event, resp) => {
         console.log(resp);
       });
     }
