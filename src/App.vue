@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color="primary">
-      <v-toolbar>Most Used Words</v-toolbar>
+      <v-toolbar-title>Most Used Words</v-toolbar-title>
     </v-app-bar>
 
     <v-content>

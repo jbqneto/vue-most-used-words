@@ -1,7 +1,8 @@
 /**
  * @param {Array} rows
+ * @param {Number} minLength
  */
-module.exports = rows => {
+module.exports = (rows, minLength = 3) => {
   return new Promise((resolve, reject) => {
     try {
       const words = rows
@@ -10,7 +11,7 @@ module.exports = rows => {
         .map(removeTags)
         .reduce(mergeRows)
         .split(' ')
-        .filter(word => (word.length > 2))
+        .filter(word => (word.length > minLength))
         .map(word => word.toLowerCase());
 
       resolve(words);
@@ -37,7 +38,7 @@ function filterValidRow(row) {
  * @param {String} row 
  */
 function removeSpecialChars(row) {
-  return row.replace(/[,?!.-] /g, '').replace('"', '').replace("'", '');
+  return row.replace(/[^\w\s]/gi, '').replace('"', '');
 }
 
 const removeTags = row => row.replace(/(<[^>]+)>/ig, '').trim();

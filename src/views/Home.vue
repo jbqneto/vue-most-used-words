@@ -11,6 +11,16 @@
         v-model="files"
       ></v-file-input>
     </v-form>
+    <div class="info">
+      <p>
+        Subtitles:
+        <span>{{files.length}}</span>
+      </p>
+      <p>
+        Words:
+        <span>{{groupedWords.length}}</span>
+      </p>
+    </div>
     <div class="pills">
       <Pill v-for="(word, i) in groupedWords" :key="i" :amount="word.amount" :name="word.name"></Pill>
     </div>
@@ -29,27 +39,15 @@ export default {
   data: function() {
     return {
       files: [],
-      groupedWords: [
-        { name: "you", amount: 900 },
-        { name: "he", amount: 200 },
-        { name: "she", amount: 300 },
-        { name: "that", amount: 200 },
-        { name: "try", amount: 180 },
-        { name: "not", amount: 120 },
-        { name: "all", amount: 321 },
-        { name: "yes", amount: 81 },
-        { name: "why", amount: 16 }
-      ]
+      groupedWords: []
     };
   },
   methods: {
     processSubtitles() {
-      console.log(this.files);
       const paths = this.files.map(file => file.path);
-      console.log(paths);
       ipcRenderer.send("process-subtitles", paths);
       ipcRenderer.on("process-subtitles", (event, resp) => {
-        console.log(resp);
+        this.groupedWords = resp;
       });
     }
   }
